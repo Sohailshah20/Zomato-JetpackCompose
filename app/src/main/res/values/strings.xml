@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ZomatoClone</string>
+    <string name="search_bar_placeholder">Restaurant name or a dish..</string>
+</resources>
