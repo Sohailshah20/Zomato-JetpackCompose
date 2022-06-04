@@ -7,6 +7,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Mic
@@ -22,8 +24,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextAlign
@@ -41,9 +45,9 @@ fun MySearchBar(
     modifier : Modifier = Modifier,
     text : String,
     onTextChange : (String) -> Unit,
-    onCloseClicked : () -> Unit,
-    onSearchClicked : () -> Unit,
     placeHolder : String,
+    onCloseClicked : () -> Unit,
+    onSearchClicked : (String) -> Unit,
     onMicClicked : () -> Unit
 ){
     Box(
@@ -76,12 +80,6 @@ fun MySearchBar(
                     fontWeight = FontWeight.Normal,
                 )
             },
-            textStyle = TextStyle(
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = MaterialTheme.typography.titleSmall.fontSize,
-                fontWeight = FontWeight.Normal,
-
-            ),
             leadingIcon = {
                 IconButton(onClick = { }) {
                     Icon(
@@ -117,7 +115,21 @@ fun MySearchBar(
                     }
                 }
             },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    onSearchClicked(text)
+                }
+            ),
             singleLine = true,
+            textStyle = TextStyle(
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                fontWeight = FontWeight.Normal,
+
+                ),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 containerColor = MaterialTheme.colorScheme.surface,
                 focusedBorderColor = Color.Transparent,
@@ -152,5 +164,22 @@ fun SearchBarDivider(
 @Preview()
 fun SearchPreview(){
     ZomatoCloneTheme {
+        Box(
+            modifier = Modifier
+                .background(Color.White)
+                .padding(40.dp)
+                .fillMaxWidth()
+                .height(100.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            MySearchBar(
+                text = "",
+                onTextChange = {},
+                placeHolder = stringResource(id = R.string.search_bar_placeholder),
+                onCloseClicked = { /*TODO*/ },
+                onSearchClicked = {},
+                onMicClicked = {}
+            )
+        }
     }
 }

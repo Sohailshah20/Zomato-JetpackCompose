@@ -27,7 +27,7 @@ import com.example.zomatoclone.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RestaurantCard(
+fun SmallRestaurantCard(
     modifier : Modifier = Modifier
 ){
     //55 35 10
@@ -408,5 +408,5 @@ fun test4(){
 @Preview
 @Composable
 fun cardtest(){
-    RestaurantCard()
+    SmallRestaurantCard()
 }
