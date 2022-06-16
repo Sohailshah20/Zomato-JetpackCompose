@@ -1,13 +1,15 @@
-package com.example.zomatoclone.ui.component
+package com.example.zomatoclone.presentation.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Recycling
 import androidx.compose.material.icons.filled.Timer
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,25 +19,32 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.zomatoclone.R
 import com.example.zomatoclone.ui.theme.BrandBlue
-import com.example.zomatoclone.ui.theme.BrandBlueLight
 import com.example.zomatoclone.ui.theme.BrandGreenColor
-import com.example.zomatoclone.ui.theme.BrandGreenColorLight
+import com.example.zomatoclone.ui.theme.ZomatoCloneTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun LargeRestaurantCard(
     modifier : Modifier = Modifier
 ) {
+    val isRestaurantVeg by remember { mutableStateOf(false)}
+    val isSavedState = remember { mutableStateOf(false)}
+    val saveIcon = if (isSavedState.value) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
     Card(
         modifier = modifier
-            .height(310.dp)
-            .fillMaxWidth(),
+            .wrapContentHeight()
+            .fillMaxWidth()
+
+        ,
         shape = RoundedCornerShape(16.dp),
+        elevation = 5.dp,
+
     ) {
         Box(
             modifier = modifier
@@ -45,11 +54,11 @@ fun LargeRestaurantCard(
             Column {
                 Box(
                     modifier = Modifier
-                        .height(210.dp)
+                        .height(225.dp)
                 ){
                     AsyncImage(
                         modifier = Modifier
-                            .height(210.dp)
+                            .height(225.dp)
                         ,
                         model = R.drawable.biryani_picture,
                         contentDescription = null,
@@ -60,21 +69,34 @@ fun LargeRestaurantCard(
                             .align(Alignment.BottomEnd)
                             .padding(10.dp)
                     )
+                    val bottomPadding : Dp = if (isRestaurantVeg) 40.dp else 20.dp
                     SaveHeartButton(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
-                            .padding(20.dp)
+                            .padding(horizontal = 20.dp, bottomPadding)
+                            .size(40.dp)
+                    ,
+                        icon = saveIcon,
+                        onCLick = {
+                            isSavedState.value = !isSavedState.value
+                        }
                     )
                     PromotedTag(
                         modifier = Modifier
                             .align(Alignment.TopStart)
-                            .padding(horizontal = 10.dp, vertical = 20.dp)
+                            .padding(horizontal = 10.dp, vertical = bottomPadding)
                     )
                     DiscountBox(
                         modifier = Modifier
                             .align(Alignment.BottomStart)
                             .padding(bottom = 10.dp)
                     )
+                    if (isRestaurantVeg){
+                        VegetarianCardLarge(
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(
@@ -84,13 +106,18 @@ fun LargeRestaurantCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
+                        modifier = Modifier
+                            .weight(0.7f)
+                        ,
                         text = "United Kitchens Of India",
-                        color = Color.Black,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        fontWeight = FontWeight.Bold,
+                        color = ZomatoCloneTheme.colors.brandTextBlack,
+                        style = MaterialTheme.typography.body1
                     )
-                    Spacer(modifier = Modifier.weight(1f))
-                    RestaurantRating()
+                    Spacer(modifier = Modifier.weight(0.3f))
+                    RestaurantRating(
+                        modifier = Modifier
+                            .align(Alignment.Top)
+                    )
                 }
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(
@@ -100,17 +127,22 @@ fun LargeRestaurantCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
+                        modifier = Modifier.weight(0.7f),
                         text = "Biryani, South Indian, Sea Food",
-                        color = Color.Black,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        color = ZomatoCloneTheme.colors.brandTextBlack,
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.Start
                     )
-                    Spacer(modifier = Modifier.weight(1f))
                     Text(
-                        text = "$400 for One",
-                        color = Color.Black,
-                        fontSize = MaterialTheme.typography.labelMedium.fontSize,
+                        modifier = Modifier
+                            .weight(0.3f)
+                        ,
+                        text = "$200 for One",
+                        color = ZomatoCloneTheme.colors.brandTextBlack,
+                        fontSize = MaterialTheme.typography.caption.fontSize,
                         fontWeight = FontWeight.Normal,
+                        textAlign = TextAlign.End
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
@@ -118,10 +150,9 @@ fun LargeRestaurantCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 10.dp),
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = ZomatoCloneTheme.colors.brandTextGrey,
                     thickness = 0.2.dp
                 )
-                Spacer(modifier = Modifier.weight(1f))
                 RecycleRow()
 
             }
@@ -153,10 +184,10 @@ fun DistanceAndTime(
         Text(
             text = "50 mins",
             color = Color.Black,
-            fontSize = MaterialTheme.typography.labelSmall.fontSize,
-            fontWeight = FontWeight.Normal,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.SemiBold,
         )
-        Spacer(modifier = Modifier.width(2.dp))
+        Spacer(modifier = Modifier.width(4.dp))
         Divider(
             modifier = Modifier
                 .width(0.5.dp)
@@ -164,12 +195,12 @@ fun DistanceAndTime(
             color = Color.Black,
             thickness = 10.dp
         )
-        Spacer(modifier = Modifier.width(2.dp))
+        Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = "8 km",
             color = Color.Black,
-            fontSize = MaterialTheme.typography.labelSmall.fontSize,
-            fontWeight = FontWeight.Normal,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.SemiBold,
         )
     }
 }
@@ -194,7 +225,7 @@ fun FoodNameAndPrice(
             Text(
                 text = "Chicken Biryani",
                 color = Color.Black,
-                fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.End
             )
@@ -214,6 +245,7 @@ fun FoodNameAndPrice(
     }
 }
 
+@Preview
 @Composable
 fun DiscountBox(
     modifier: Modifier = Modifier
@@ -222,9 +254,9 @@ fun DiscountBox(
         modifier = modifier
             .clip(RoundedCornerShape(topEnd = 4.dp, bottomEnd = 4.dp))
             .background(BrandBlue)
-            .padding(4.dp)
+            .padding(horizontal = 6.dp, vertical = 2.dp)
             ,
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
        Column(
            modifier = Modifier
@@ -238,7 +270,7 @@ fun DiscountBox(
                    .size(10.dp)
            )
        }
-        Spacer(modifier = Modifier.width(2.dp))
+        Spacer(modifier = Modifier.width(4.dp))
         Column(
             modifier = Modifier,
             horizontalAlignment = Alignment.Start
@@ -251,7 +283,7 @@ fun DiscountBox(
                 Text(
                     text = "10 % OFF",
                     color = Color.White,
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -262,7 +294,7 @@ fun DiscountBox(
                 Text(
                     text = "Up to $40",
                     color = Color.White,
-                    fontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -278,7 +310,7 @@ fun VegetarianCardLarge(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(30.dp)
+            .height(25.dp)
             .background(color = BrandGreenColor.copy(0.8f))
             .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -295,7 +327,7 @@ fun VegetarianCardLarge(
         Text(
             text = "PURE VEG RESTAURANT",
             color = Color.White,
-            fontSize = 9.sp,
+            fontSize = MaterialTheme.typography.subtitle1.fontSize,
             fontWeight = FontWeight.Bold,
 
             )
@@ -310,7 +342,7 @@ fun RecycleRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .height(30.dp)
+            .height(40.dp)
             .background(color = Color.White)
             .padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -320,13 +352,13 @@ fun RecycleRow(
             contentDescription = null,
             tint = BrandGreenColor,
             modifier = modifier
-                .size(14.dp)
+                .size(20.dp)
         )
-        Spacer(modifier = modifier.width(4.dp))
+        Spacer(modifier = modifier.width(8.dp))
         Text(
             text = "Zomato recycles more plastic than used in orders",
             color = Color.Black,
-            fontSize = MaterialTheme.typography.labelSmall.fontSize,
+            fontSize = 11.sp,
             fontWeight = FontWeight.Light,
 
             )
@@ -343,12 +375,6 @@ fun prevRecycleRow(){
 @Composable
 fun prevVegetarianCardLarge(){
     VegetarianCardLarge()
-}
-
-@Preview
-@Composable
-fun prevDiscountBox(){
-    DiscountBox()
 }
 
 @Preview

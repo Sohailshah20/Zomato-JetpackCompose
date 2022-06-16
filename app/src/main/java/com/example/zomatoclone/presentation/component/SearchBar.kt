@@ -1,38 +1,28 @@
-package com.example.zomatoclone.ui.component
+package com.example.zomatoclone.presentation.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.Microwave
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.*
-import androidx.compose.material3.TextFieldDefaults.OutlinedTextFieldDecorationBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.zomatoclone.R
@@ -57,7 +47,7 @@ fun MySearchBar(
             .border(
                 BorderStroke(
                     0.1.dp,
-                    SolidColor(MaterialTheme.colorScheme.onSurface)
+                    SolidColor(ZomatoCloneTheme.colors.brandTextGrey.copy(alpha = 0.5f))
                 ),
                 RoundedCornerShape(12.dp)
             ),
@@ -65,7 +55,7 @@ fun MySearchBar(
         ) {
 
         OutlinedTextField(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp),
             value = text,
@@ -75,9 +65,9 @@ fun MySearchBar(
             placeholder = {
                 Text(
                     text = placeHolder,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontSize = MaterialTheme.typography.titleSmall.fontSize,
-                    fontWeight = FontWeight.Normal,
+                    color = ZomatoCloneTheme.colors.brandTextGrey,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
                 )
             },
             leadingIcon = {
@@ -86,7 +76,7 @@ fun MySearchBar(
                         imageVector = Icons.Default.Search,
                         contentDescription = null,
                         tint = Cranberry,
-                        modifier = modifier.size(22.dp)
+                        modifier = Modifier.size(22.dp)
                     )
                 }
             },
@@ -103,14 +93,14 @@ fun MySearchBar(
                             imageVector = Icons.Default.Clear,
                             contentDescription = null,
                             tint = Cranberry,
-                            modifier = modifier.size(22.dp)
+                            modifier = Modifier.size(22.dp)
                         )
                     }else {
                         Icon(
                             imageVector = Icons.Default.Mic,
                             contentDescription = null,
                             tint = Cranberry,
-                            modifier = modifier.size(22.dp)
+                            modifier = Modifier.size(22.dp)
                         )
                     }
                 }
@@ -125,21 +115,21 @@ fun MySearchBar(
             ),
             singleLine = true,
             textStyle = TextStyle(
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+                color = MaterialTheme.colors.onBackground,
+                fontSize = 11.sp,
                 fontWeight = FontWeight.Normal,
 
                 ),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                containerColor = MaterialTheme.colorScheme.surface,
+                backgroundColor = ZomatoCloneTheme.colors.brandLightGrey,
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent,
-                cursorColor = MaterialTheme.colorScheme.onBackground
+                cursorColor = ZomatoCloneTheme.colors.brandTextBlack
 
             ),
         )
         SearchBarDivider(
-            modifier = modifier
+            modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(horizontal = 50.dp)
         )
@@ -155,7 +145,7 @@ fun SearchBarDivider(
         modifier = modifier
             .width(1.dp)
         ,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = ZomatoCloneTheme.colors.brandTextGrey,
         thickness = 20.dp
     )
 }
