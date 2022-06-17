@@ -2,9 +2,9 @@
 
 package com.example.zomatoclone.presentation
 
-import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Icon
@@ -12,8 +12,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.outlined.Comment
 import androidx.compose.runtime.*
@@ -21,24 +19,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.zomatoclone.data.CuisineCategory
-import com.example.zomatoclone.data.RecommendedRestaurantsSmall
+import com.example.zomatoclone.data.RestaurantsSmallDetails
 import com.example.zomatoclone.data.cuisineCategoryList
 import com.example.zomatoclone.presentation.component.*
 import com.example.zomatoclone.presentation.homescreen.HomeScreenViewModel
 import com.example.zomatoclone.ui.theme.ZomatoCloneTheme
-import com.google.accompanist.flowlayout.FlowMainAxisAlignment
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.flowlayout.SizeMode
+import com.google.accompanist.flowlayout.*
 import kotlin.math.abs
 
 
@@ -52,9 +47,6 @@ fun HomeScreen(
 
 ){
     val viewModel : HomeScreenViewModel = viewModel()
-
-    val isSavedState = remember { mutableStateOf(false)}
-    val saveIcon = if (isSavedState.value) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
 
     Scaffold(
         topBar = {
@@ -85,10 +77,41 @@ fun HomeScreen(
                     showMore = !showMore
                 }
             )
-            RecommendedForYouRow()
+            HorizontalRestaurantRow(
+                recommendedRestaurants = viewModel.horizontalRowState.value,
+                rowTitle = "Recommended for you",
+            ){ id ->
+                viewModel.toggleIsSaved(id)
+            }
+            HorizontalRestaurantRow(
+                recommendedRestaurants = viewModel.horizontalRowState.value,
+                rowTitle = "Promoted restaurants",
+            ){ id ->
+                viewModel.toggleIsSaved(id)
+            }
+            HorizontalRestaurantRow(
+                recommendedRestaurants = viewModel.horizontalRowState.value,
+                rowTitle = "Delicious Chinese",
+            ){ id ->
+                viewModel.toggleIsSaved(id)
+            }
+            HorizontalRestaurantRow(
+                recommendedRestaurants = viewModel.horizontalRowState.value,
+                rowTitle = "Amazing Biryani",
+            ){ id ->
+                viewModel.toggleIsSaved(id)
+            }
+            VerticalRestaurantRow(
+                numberOfRestaurants = 5,
+                restaurantsAroundYou = viewModel.verticalRowState.value
+            ){ id ->
+
+            }
         }
     }
 }
+
+
 
 @Composable
 fun SearchChips(){
@@ -213,7 +236,6 @@ fun CuisineTypeGrid(
         modifier =Modifier
             .padding(horizontal = 10.dp)
                 ,
-        mainAxisSize = SizeMode.Expand,
         mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween,
 
     ) {
@@ -240,10 +262,11 @@ fun CuisineTypeGrid(
 }
 
 @Composable
-fun RecommendedForYouRow(
+fun HorizontalRestaurantRow(
     modifier: Modifier = Modifier,
-    recommendedRestaurants : List<RecommendedRestaurantsSmall>,
-    icon : ImageVector
+    rowTitle : String,
+    recommendedRestaurants : List<RestaurantsSmallDetails>,
+    onSaveClick : (id : Int) -> Unit,
 ){
     Row(
         modifier = Modifier
@@ -252,7 +275,7 @@ fun RecommendedForYouRow(
         verticalAlignment = Alignment.Bottom
     ) {
         Text(
-            text = "Recommended for you",
+            text = rowTitle,
             style = MaterialTheme.typography.body2
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -263,27 +286,49 @@ fun RecommendedForYouRow(
             fontWeight = FontWeight.SemiBold,
         )
         Spacer(modifier = Modifier.height(10.dp))
-        LazyRow(modifier = modifier){
-            items(items = recommendedRestaurants){ restataurant ->
-                SmallRestaurantCard(
-                    discountPercentage = restataurant.discountPercentage.toString(),
-                    discountUpTo = restataurant.discountUpTo.toString(),
-                    perHeadPrice = restataurant.perHeadPrice,
-                    time = restataurant.time,
-                    distance = restataurant.distance,
-                    restaurantRating = restataurant.restaurantRating,
-                    restaurantName = restataurant.restaurantName,
-                    image = restataurant.image,
-                    isVeg = restataurant.isVeg,
-                    isPromoted = restataurant.isPromoted,
-                    isSaved = restataurant.isPromoted,
-                    discountAvailable = restataurant.discountAvailable,
-                    icon = icon
-                )
+    }
+    LazyRow(
+        modifier = modifier
+            ,
+        contentPadding = PaddingValues(all = 10.dp),
+        horizontalArrangement = Arrangement.spacedBy(15.dp)
+
+    ){
+        items(items = recommendedRestaurants){ restaurant ->
+            SmallRestaurantCard(restaurant = restaurant){ id ->
+                onSaveClick(restaurant.id)
             }
         }
     }
 }
+
+@Composable
+fun VerticalRestaurantRow(
+    modifier: Modifier = Modifier,
+    numberOfRestaurants : Int,
+    restaurantsAroundYou : List<RestaurantsSmallDetails>,
+    onSaveClick : (id : Int) -> Unit,
+){
+    Column(
+        modifier = modifier
+            .padding(10.dp)
+    ) {
+        Text(
+            buildAnnotatedString {
+                append(numberOfRestaurants.toString())
+                append(" restaurants around you")
+            },
+            style = MaterialTheme.typography.body2
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        for (i in (restaurantsAroundYou.indices)) {
+            LargeRestaurantCard(restaurant = restaurantsAroundYou[i], onSaveClick = onSaveClick)
+            Spacer(modifier = modifier.height(10.dp))
+        }
+    }
+
+}
+
 
 @Composable
 fun rememberNestedScrollConnection(onOffsetChanged:(Float)->Unit, appBarHeight:Float) = remember {

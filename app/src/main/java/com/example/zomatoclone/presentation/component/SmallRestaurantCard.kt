@@ -20,38 +20,29 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.zomatoclone.R
+import com.example.zomatoclone.data.RestaurantsSmallDetails
 import com.example.zomatoclone.ui.theme.*
 
 @Composable
 fun SmallRestaurantCard(
     modifier : Modifier = Modifier,
-    discountPercentage : String,
-    discountUpTo : String,
-    perHeadPrice : Int,
-    time : Int,
-    distance : Int,
-    restaurantRating : Double,
-    restaurantName : String,
-    image : Int,
-    isVeg : Boolean,
-    isPromoted : Boolean,
-    isSaved : Boolean,
-    discountAvailable : Boolean,
-    icon : ImageVector,
-    onSaveClick : () -> Unit
+    restaurant : RestaurantsSmallDetails,
+    onSaveClick : (id : Int) -> Unit
 ){
+    val saveIcon = if (restaurant.isSaved) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+
     Card(
         modifier = modifier
             .height(264.dp)
             .width(165.dp)
                 ,
         shape = RoundedCornerShape(16.dp),
+        elevation = 10.dp
     ) {
         Box(
             modifier = modifier
@@ -68,7 +59,7 @@ fun SmallRestaurantCard(
                        modifier = Modifier
                            .height(150.dp)
                        ,
-                       model = image,
+                       model = restaurant.image,
                        contentDescription = null,
                        contentScale = ContentScale.Crop,
                    )
@@ -77,19 +68,18 @@ fun SmallRestaurantCard(
                            .align(Alignment.TopEnd)
                            .padding(vertical = 20.dp, horizontal = 8.dp)
                    ,
-                       icon = icon,
-                       onCLick = {
-                           onSaveClick()
-                       }
-                   )
-                   if (isVeg) {
+                       icon = saveIcon,
+                   ){
+                       onSaveClick(restaurant.id)
+                   }
+                   if (restaurant.isVeg) {
                        VegetarianCard(
                            modifier = Modifier
                                .align(Alignment.BottomCenter)
                        )
                    }
-                   val bottomPadding : Dp = if (isVeg) 30.dp else 8.dp
-                   if (isPromoted) {
+                   val bottomPadding : Dp = if (restaurant.isVeg) 30.dp else 8.dp
+                   if (restaurant.isPromoted) {
                        PromotedTag(
                            modifier = Modifier
                                .align(Alignment.BottomEnd)
@@ -111,19 +101,19 @@ fun SmallRestaurantCard(
                            .padding(8.dp)
                    ) {
                         Text(
-                            text = restaurantName,
-                            color = ZomatoCloneTheme.colors.brandTextBlack,
-                            fontSize = 11.sp,
+                            text = restaurant.restaurantName,
+                            fontSize = MaterialTheme.typography.overline.fontSize,
                             fontWeight = FontWeight.Bold,
+                            color = ZomatoCloneTheme.colors.brandTextBlack,
                             lineHeight = 15.sp
                         )
                        Spacer(modifier = Modifier.height(6.dp))
                        RestaurantDistance(
-                           time = time,
-                           distance = distance
+                           time = restaurant.time,
+                           distance = restaurant.distance
                        )
                        Spacer(modifier = Modifier.height(1.dp))
-                       RestaurantPrice(perHeadPrice = perHeadPrice)
+                       RestaurantPrice(perHeadPrice = restaurant.perHeadPrice)
                    }
                    Column(
                        modifier = modifier
@@ -132,14 +122,14 @@ fun SmallRestaurantCard(
                            .padding(top = 8.dp)
                    ) {
                         RestaurantRating(
-                            restaurantRating = restaurantRating
+                            restaurantRating = restaurant.restaurantRating
                         )
                    }
                }
-               if (discountAvailable) {
+               if (restaurant.discountAvailable) {
                    DiscountCard(
-                       discountPercentage = discountPercentage,
-                       discountUpTo = discountUpTo
+                       discountPercentage = restaurant.discountPercentage.toString(),
+                       discountUpTo = restaurant.discountUpTo.toString()
                    )
                }
            }
@@ -167,7 +157,7 @@ fun SmallRestaurantCard(
 @Composable
 fun RestaurantRating(
     modifier : Modifier = Modifier,
-    restaurantRating : Int
+    restaurantRating : Double
 ){
     Row(
         modifier = modifier
@@ -180,7 +170,7 @@ fun RestaurantRating(
         Text(
             text = restaurantRating.toString(),
             color = Color.White,
-            fontSize = 11.sp,
+            style = MaterialTheme.typography.overline,
             fontWeight = FontWeight.Bold,
         )
         Icon(
@@ -230,7 +220,7 @@ fun RestaurantDistance(
             contentDescription = null,
             tint = Color.Black,
             modifier = modifier
-                .size(10.dp)
+                .size(12.dp)
 
         )
         Spacer(modifier = modifier.width(4.dp))
@@ -241,7 +231,7 @@ fun RestaurantDistance(
             },
             color = ZomatoCloneTheme.colors.brandTextBlack,
             fontSize = MaterialTheme.typography.overline.fontSize,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.Medium,
         )
         Spacer(modifier = modifier.width(4.dp))
         Divider(
@@ -259,7 +249,7 @@ fun RestaurantDistance(
             },
             color = ZomatoCloneTheme.colors.brandTextBlack,
             fontSize = MaterialTheme.typography.overline.fontSize,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.Medium,
         )
     }
 }
@@ -279,7 +269,7 @@ fun RestaurantPrice(
             contentDescription = null,
             tint = Color.Black,
             modifier = modifier
-                .size(10.dp)
+                .size(12.dp)
 
         )
         Spacer(modifier = modifier.width(4.dp))
@@ -291,7 +281,7 @@ fun RestaurantPrice(
             },
             color = ZomatoCloneTheme.colors.brandTextBlack,
             fontSize = MaterialTheme.typography.overline.fontSize,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.Medium,
         )
         Spacer(modifier = modifier.width(4.dp))
 
@@ -361,7 +351,7 @@ fun VegetarianCard(
         Text(
             text = "Pure Veg",
             color = BrandGreenColor,
-            fontSize = 9.sp,
+            fontSize = 11.sp,
             fontWeight = FontWeight.Bold,
 
             )
@@ -372,7 +362,7 @@ fun VegetarianCard(
 fun SaveHeartButton(
     modifier : Modifier = Modifier,
     icon : ImageVector,
-    onCLick : () -> Unit
+    onClick : () -> Unit = {}
 ) {
     IconButton(
         modifier = modifier
@@ -380,12 +370,12 @@ fun SaveHeartButton(
             .background(Color.White)
             .size(30.dp),
         onClick = {
-            onCLick()
+            onClick()
         }
     ) {
         Icon(
                 modifier = Modifier
-                    .size(16.dp),
+                    .size(18.dp),
                 imageVector = icon,
                 contentDescription = null,
                 tint = Cranberry
