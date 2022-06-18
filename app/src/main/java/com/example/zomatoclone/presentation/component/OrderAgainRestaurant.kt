@@ -61,7 +61,7 @@ fun OrderAgainRestaurantCard(
                 verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(
-                    text = "Grill 9 Grill 9 Grill 9Grill 9",
+                    text = "Lovely Punjabi Dhaba",
                     color = ZomatoCloneTheme.colors.brandTextBlack,
                     fontSize = MaterialTheme.typography.subtitle2.fontSize,
                     fontWeight = FontWeight.SemiBold,

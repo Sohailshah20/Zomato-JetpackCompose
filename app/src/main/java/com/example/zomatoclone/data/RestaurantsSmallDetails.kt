@@ -24,7 +24,7 @@ data class RestaurantsSmallDetails(
 val dummySmallRestaurant = listOf(
     RestaurantsSmallDetails(
             id = 1,
-            image = R.drawable.biryani_picture,
+            image = R.drawable.restaurant_1,
             isVeg = false,
             isPromoted = false,
             restaurantName = "Paradise",
@@ -38,7 +38,7 @@ val dummySmallRestaurant = listOf(
         ),
     RestaurantsSmallDetails(
             id = 2,
-            image = R.drawable.biryani_picture,
+            image = R.drawable.restaurant_2,
             isVeg = true,
             isPromoted = false,
             restaurantName = "Chef King",
@@ -52,7 +52,7 @@ val dummySmallRestaurant = listOf(
         ),
     RestaurantsSmallDetails(
             id = 3,
-            image = R.drawable.biryani_picture,
+            image = R.drawable.restaurant_3,
             isVeg = false,
             isPromoted = true,
             restaurantName = "Azeebo Arabian Mandi",
@@ -67,7 +67,7 @@ val dummySmallRestaurant = listOf(
 
     RestaurantsSmallDetails(
             id = 4,
-            image = R.drawable.biryani_picture,
+            image = R.drawable.restaurant_4,
             isVeg = true,
             isPromoted = false,
             restaurantName = "Punjabi Dhaba",
@@ -97,7 +97,7 @@ val dummySmallRestaurant = listOf(
 val dummyLargeRestaurants =  listOf<RestaurantsSmallDetails>(
     RestaurantsSmallDetails(
         id = 1,
-        image = R.drawable.biryani_picture,
+        image = R.drawable.restaurant_5,
         isVeg = false,
         isPromoted = true,
         restaurantName = "Mujtaba Grills",
@@ -114,7 +114,7 @@ val dummyLargeRestaurants =  listOf<RestaurantsSmallDetails>(
     ),
     RestaurantsSmallDetails(
         id = 2,
-        image = R.drawable.biryani_picture,
+        image = R.drawable.restaurant_6,
         isVeg = true,
         isPromoted = false,
         restaurantName = "Tatva",
@@ -129,7 +129,7 @@ val dummyLargeRestaurants =  listOf<RestaurantsSmallDetails>(
     ),
     RestaurantsSmallDetails(
         id = 3,
-        image = R.drawable.biryani_picture,
+        image = R.drawable.restaurant_7,
         isVeg = false,
         restaurantName = "Sweet Heart",
         cuisineTypeFirst = "Chinese",
@@ -145,7 +145,7 @@ val dummyLargeRestaurants =  listOf<RestaurantsSmallDetails>(
     ),
     RestaurantsSmallDetails(
         id = 4,
-        image = R.drawable.biryani_picture,
+        image = R.drawable.restaurant_8,
         isVeg = false,
         restaurantName = "Lovely Punjabi Dhaba",
         cuisineTypeFirst = "North Indian",
@@ -160,7 +160,7 @@ val dummyLargeRestaurants =  listOf<RestaurantsSmallDetails>(
     ),
     RestaurantsSmallDetails(
         id = 5,
-        image = R.drawable.biryani_picture,
+        image = R.drawable.restaurant_1,
         isVeg = true,
         restaurantName = "Huber & Holly",
         cuisineTypeFirst = "Pizza",

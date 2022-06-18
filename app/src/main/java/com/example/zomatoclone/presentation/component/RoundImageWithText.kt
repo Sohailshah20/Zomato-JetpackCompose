@@ -24,13 +24,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.zomatoclone.R
+import com.example.zomatoclone.data.CuisineCategory
 
 import com.example.zomatoclone.ui.theme.ZomatoCloneTheme
 
 @Composable
 fun RoundImageWithText(
     modifier: Modifier = Modifier,
-    cuisineCategory : String
+    cuisineCategory : CuisineCategory
 ) {
     Column(
         modifier = Modifier
@@ -43,13 +44,13 @@ fun RoundImageWithText(
             modifier = Modifier
                 .clip(CircleShape)
                 .size(70.dp),
-            model = R.drawable.biryani_picture,
+            model = cuisineCategory.image,
             contentDescription = null,
             contentScale = ContentScale.Crop,
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = cuisineCategory,
+            text = cuisineCategory.categoryName,
             fontSize = MaterialTheme.typography.overline.fontSize,
             fontWeight = FontWeight.SemiBold,
             color = ZomatoCloneTheme.colors.brandTextGrey

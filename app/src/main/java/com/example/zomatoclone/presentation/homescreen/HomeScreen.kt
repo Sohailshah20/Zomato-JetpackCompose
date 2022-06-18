@@ -13,7 +13,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Comment
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -186,7 +188,7 @@ fun AppBar(){
 
                     )
                 Text(
-                    text = "Plot no 10, 2nd, SAIL Colony, Bowenpally",
+                    text = "Banjara Hills, Hyderabad",
                     fontSize = MaterialTheme.typography.overline.fontSize,
                     fontWeight = FontWeight.SemiBold,
                     color = ZomatoCloneTheme.colors.brandTextGrey,
@@ -205,7 +207,7 @@ fun AppBar(){
                 .size(24.dp)
         )
         Icon(
-            imageVector = Icons.Outlined.Comment,
+            imageVector = Icons.Outlined.AccountCircle,
             contentDescription = null,
             tint = Color.Black,
             modifier = Modifier
@@ -239,8 +241,8 @@ fun CuisineTypeGrid(
         mainAxisAlignment = FlowMainAxisAlignment.SpaceBetween,
 
     ) {
-        for(category in 0..cuisineCategoryList.size - items){
-            RoundImageWithText(cuisineCategory = cuisineCategoryList[category])
+        for (cuisineCategory in 0..cuisineCategoryList.size - items) {
+            RoundImageWithText(cuisineCategory = cuisineCategoryList[cuisineCategory])
         }
     }
 //    LazyVerticalGrid(
