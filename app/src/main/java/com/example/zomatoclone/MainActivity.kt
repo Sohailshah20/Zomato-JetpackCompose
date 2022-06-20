@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.zomatoclone.presentation.AppBar
 import com.example.zomatoclone.presentation.HomeScreen
+import com.example.zomatoclone.presentation.MainScreen
 import com.example.zomatoclone.presentation.component.LargeRestaurantCard
 import com.example.zomatoclone.presentation.component.MySearchBar
 import com.example.zomatoclone.presentation.component.OrderAgainRestaurantCard
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ZomatoCloneTheme {
-                HomeScreen()
+                MainScreen()
 //                Column(
 //                    modifier = Modifier
 //                        .verticalScroll(
